@@ -2,7 +2,6 @@
 #include <boost/locale.hpp>
 
 #include "csv.hpp"
-#include "utf8proc.h"
 #include "re2/re2.h"
 #include "re2/stringpiece.h"
 #include "emojis.h"
