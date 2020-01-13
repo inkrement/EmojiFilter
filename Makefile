@@ -1,5 +1,5 @@
 CXXFLAGS  = -Wall  -O3
-LDFLAGS = -lre2 -lboost_locale -I./src/vendor/ -pthread
+LDFLAGS = -lre2 -lboost_locale-mt -I./src/vendor/ -pthread
 
 emoji_filter: src/main.cc src/emojis.h
 	$(CXX) -o emoji_filter src/main.cc -std=c++17 $(LDFLAGS) $(CXXFLAGS)
