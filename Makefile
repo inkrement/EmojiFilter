@@ -1,8 +1,8 @@
 CXXFLAGS  = -Wall  -O3
-LDFLAGS = -lre2 -lboost_locale-mt -lpthread -I./src/vendor/
+LDFLAGS = -lre2 -lboost_locale -I./src/vendor/ -pthread
 
 emoji_filter: src/main.cc src/emojis.h
-	$(CXX) -std=c++17 $(LDFLAGS)  $(CXXFLAGS) $(OBJ) src/main.cc -o emoji_filter 
+	$(CXX) -o emoji_filter src/main.cc -std=c++17 $(LDFLAGS) $(CXXFLAGS)
 
 test: emoji_filter
 	./emoji_filter data/e_top1000.txt | ./pos_filter.py

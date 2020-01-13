@@ -1,6 +1,6 @@
 #include <iostream>
 #include <boost/locale.hpp>
-
+#include <pthread.h>
 #include "csv.hpp"
 #include "re2/re2.h"
 #include "re2/stringpiece.h"
@@ -85,6 +85,11 @@ inline void to_json(ostream &stream, std::string &text, std::string &raw, std::s
 
 
 int main (int argc, char *argv[]) {
+    
+    if (argc != 2) {
+	std::cerr << "USAGE: emoji_filter input_file.txt" << std::endl;
+    }
+
     CSVFormat format;
     format.delimiter('\t');  // Header is on 3rd row (zero-indexed)
     format.column_names({"c1", "text", "c2", "c3", "c4", "lang", "c6"});
@@ -94,13 +99,14 @@ int main (int argc, char *argv[]) {
     std::locale loc=gen(""); 
     std::locale::global(loc);
 
-    CSVReader reader("./data/e_top1000.txt", format);
+    CSVReader reader(argv[1], format);
 
     for (CSVRow& row: reader) { // Input iterator
         std::string text_raw = row["text"].get<>();
 
         // unicode normalization
         std::string text =  boost::locale::normalize(text_raw,boost::locale::norm_nfd, loc);
+	//std::string text = text_raw;
 
         if ( prefilter(text) == false || row["lang"].get<>() != "en" ) {
             continue;
@@ -110,11 +116,13 @@ int main (int argc, char *argv[]) {
         std::set<std::string> emojis;
         std::string emoji;
 
+	//std::cerr << text << endl;
         re2::StringPiece input(text);
 
-        while (RE2::FindAndConsume(&input, emoji_re, &emoji)) {
-            emojis.insert(emoji);
-        }
+	//cout << input.length() << endl;
+        //while (RE2::FindAndConsume(&input, emoji_re, &emoji)) {
+        //    emojis.insert("test");
+        //}
 
         // clean up: remove emojis, quotation marks, newline..
         text = clean(text);
