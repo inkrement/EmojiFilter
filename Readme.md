@@ -14,4 +14,3 @@ make
 ## Dependencies
  - [re2](https://github.com/google/re2/wiki/Syntax)
  - [boost locale](https://www.boost.org/doc/libs/1_72_0/libs/locale/doc/html/index.html)
- - [CSV Parser](https://github.com/vincentlaucsb/csv-parser)

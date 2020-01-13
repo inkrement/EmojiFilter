@@ -108,7 +108,6 @@ inline void to_json(ostream &stream, std::string &text, std::string &raw, std::s
 std::optional<std::string> nextLine(std::istream &input) {
     // TSV (mysql dump format)
     // "c1", "text", "c2", "c3", "c4", "lang", "c6"
-    // skip 
 
     bool escaped = false;
 
@@ -132,23 +131,26 @@ std::optional<std::string> nextLine(std::istream &input) {
         }
 
         if (ch == '\n' && !escaped){
-            field=0;
+            // finished parsing line
 
-            // break
-            std::string ret = output.str();
-            output.clear();
-
+            // correct language: return!
             if (lang == 2) {
-                return ret;
+                return output.str();
             }
+
+            // wrong language, skip tweet
+            // and process next line
             // reset and parse next line
             field = 0;
             lang = 0;
             escaped = false;
+            output.clear();
+
             continue;
         }
 
         if (field == 1){
+            // TSV uses \N to mark Null values
             // if escaped && N null value (!)
             if (ch == 'N' && escaped) {
                 return {};
@@ -156,7 +158,7 @@ std::optional<std::string> nextLine(std::istream &input) {
             output << ch;
         }
 
-        //language
+        // parse language
         if (field == 5){
             if (lang == 0 && ch == 'e') {
                 lang = 1;
@@ -201,7 +203,6 @@ int main (int argc, char *argv[]) {
 
             // unicode normalization
             std::string text =  boost::locale::normalize(text_raw.value(), boost::locale::norm_nfd, loc);
-	        //std::string text = text_raw;
 
             if ( prefilter(text) == false) {
                 continue;
@@ -214,12 +215,9 @@ int main (int argc, char *argv[]) {
 	        //std::cerr << text << endl;
             re2::StringPiece input(text);
 
-	        //cout << input.length() << endl;
             while (RE2::FindAndConsume(&input, emoji_re, &emoji)) {
                 emojis.insert(emoji);
             }
-
-            //emojis.insert("test");
 
             // clean up: remove emojis, quotation marks, newline..
             text = clean(text);
@@ -228,6 +226,7 @@ int main (int argc, char *argv[]) {
             // INFO: not so easy in c++... shift it to python
 
             // write out
+            // HOTFIX: do not print a newline in last line
             if (line > 0) { std::cout << endl; }
             to_json(std::cout ,text, text_raw.value(), emojis);
 

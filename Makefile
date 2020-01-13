@@ -1,4 +1,4 @@
-CXXFLAGS  = -Wall  -O3
+CXXFLAGS = -Wall  -O3
 LDFLAGS = -lre2 -pthread
 UNAME := $(shell uname)
 
