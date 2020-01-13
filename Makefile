@@ -10,4 +10,8 @@ test: emoji_filter
 clean:
 	rm -f emoji_filter
 
-.PHONY: test clean
+install: emoji_filter
+	cp emoji_filter /usr/local/bin
+	cp pos_filter.py /usr/local/bin
+
+.PHONY: test clean install
