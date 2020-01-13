@@ -4148,9 +4148,9 @@ namespace csv {
         ///@}
 
         CSVReader(const CSVReader&) = delete; // No copy constructor
-        //CSVReader(CSVReader&&) = default;     // Move constructor
+        CSVReader(CSVReader&&) = default;     // Move constructor
         CSVReader& operator=(const CSVReader&) = delete; // No copy assignment
-        //CSVReader& operator=(CSVReader&& other) = default;
+        CSVReader& operator=(CSVReader&& other) = default;
         ~CSVReader() { this->close(); }
 
         /** @name Reading In-Memory Strings

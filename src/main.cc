@@ -94,7 +94,7 @@ int main (int argc, char *argv[]) {
     std::locale loc=gen(""); 
     std::locale::global(loc);
 
-    CSVReader reader = CSVReader("./data/e_top1000.txt", format);
+    CSVReader reader("./data/e_top1000.txt", format);
 
     for (CSVRow& row: reader) { // Input iterator
         std::string text_raw = row["text"].get<>();
