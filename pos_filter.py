@@ -14,7 +14,11 @@ def main():
 
         text = dct['raw']
 
-        doc = nlp(text)
+        doc = nlp(text, disable=[
+            'merge_noun_chunks', 'ner', 'merge_entities', 
+            'merge_subtokens','textcat','entity_linker'
+            ]
+        )
         deps = [ i.dep_ for i in doc ]
         pos = [ i.pos_ for i in doc ]
 
