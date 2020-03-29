@@ -1,5 +1,5 @@
 # Extract Emoji-Tweets
-This program can be used to extract and preprocess tweets. Selected tweets contain at least one emoji of the unicode group "smileys & emotions". This group contains 150 different emojis which are likely used to express emotions on social media.
+This program can be used to extract and preprocess tweets. It expects a tsv file as input (such as a MySQL/MariaDB dump) and converts it to line-wise json (e.g., jsonl, ndjson). Selected tweets contain at least one emoji of the unicode group "smileys & emotions". This group contains 150 different emojis which are likely used to express emotions on social media.
 
 
 ## Dependencies
